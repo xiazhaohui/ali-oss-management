@@ -12,12 +12,121 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bar-id",
+          "title": "OSS 资源管理",
+          "icon": "src/images/upload-icon.png"
+        }
+      ]
+    },
+    "views": {
+      "bar-id": [
+        {
+          "id": "view-id",
+          "name": "文件列表"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "bar-id",
+        "contents": "Failed to connect OSS. \n[进入配置](command:uploader.configuration)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "uploader.uploadFile",
+          "group": "navigation@1",
+          "when": "view === view-id"
+        },
+        {
+          "command": "uploader.refreshOss",
+          "group": "navigation@2",
+          "when": "view === view-id"
+        },
+        {
+          "command": "uploader.configuration",
+          "group": "navigation@3",
+          "when": "view === view-id"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "ali-oss-management.helloWorld",
-        "title": "Hello World"
+        "command": "uploader.uploadFile",
+        "title": "上传文件",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "uploader.refreshOss",
+        "title": "刷新",
+        "icon": "$(search-refresh)"
+      },
+      {
+        "command": "uploader.configuration",
+        "title": "配置",
+        "icon": "$(settings-view-bar-icon)"
+      },
+      {
+        "command": "webviewPanel.showImage",
+        "title": "预览图片",
+        "category": "预览"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "ali-oss-management",
+      "properties": {
+        "ali-oss-management.accessKeyId": {
+          "type": "string",
+          "description": "Input the OSS accessKeyId for your extension."
+        },
+        "ali-oss-management.accessKeySecret": {
+          "type": "string",
+          "description": "Input the OSS accessKeySecret for your extension."
+        },
+        "ali-oss-management.endpoint": {
+          "type": "string",
+          "enum": [
+            "oss-cn-hangzhou.aliyuncs.com",
+            "oss-cn-shanghai.aliyuncs.com",
+            "oss-cn-qingdao.aliyuncs.com",
+            "oss-cn-beijing.aliyuncs.com",
+            "oss-cn-shenzhen.aliyuncs.com",
+            "oss-cn-hongkong.aliyuncs.com",
+            "oss-us-west-1.aliyuncs.com",
+            "oss-ap-southeast-1.aliyuncs.com"
+          ],
+          "default": "oss-cn-hangzhou.aliyuncs.com",
+          "description": "Input the OSS endpoint for your extension."
+        },
+        "ali-oss-management.region": {
+          "type": "string",
+          "enum": [
+            "oss-cn-hangzhou",
+            "oss-cn-shanghai",
+            "oss-cn-qingdao",
+            "oss-cn-beijing",
+            "oss-cn-shenzhen",
+            "oss-cn-hongkong",
+            "oss-us-west-1",
+            "oss-ap-southeast-1"
+          ],
+          "default": "oss-cn-hangzhou",
+          "description": "Select the OSS region for your extension."
+        },
+        "ali-oss-management.bucket": {
+          "type": "string",
+          "description": "Input the OSS bucket for your extension."
+        },
+        "ali-oss-management.folder": {
+          "type": "string",
+          "description": "Input the OSS folder for your extension. such as 'resource/' or 'resource/image/'"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -28,14 +137,18 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.92.0",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
+    "@types/vscode": "^1.92.0",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.11.0",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0"
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/ali-oss": "^6.16.11",
+    "ali-oss": "^6.21.0"
   }
 }

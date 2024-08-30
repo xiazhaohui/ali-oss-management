@@ -1,26 +1,71 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import { OssUploaderViewProvider } from "./OssUploaderView";
+import { uploadFileToOSS } from "./uploadFileToOss";
+import { getWebviewContent } from "./getWebviewContent";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  let currentPanel: vscode.WebviewPanel | undefined = undefined;
+  const treeList = new OssUploaderViewProvider();
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "ali-oss-management" is now active!');
+  context.subscriptions.push(
+    vscode.window.registerTreeDataProvider("view-id", treeList),
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('ali-oss-management.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from ali-oss-management!');
-	});
+    // 预览图片
+    vscode.commands.registerCommand("webviewPanel.showImage", (imgUrl) => {
+      if (currentPanel) {
+        currentPanel.dispose();
+      }
 
-	context.subscriptions.push(disposable);
+      currentPanel = vscode.window.createWebviewPanel(
+        "webviewId",
+        "webviewTitle-预览图片",
+        vscode.ViewColumn.One,
+        {
+          enableScripts: true,
+        }
+      );
+      currentPanel.webview.html = getWebviewContent(imgUrl);
+      currentPanel.onDidDispose(
+        () => {
+          currentPanel = undefined;
+        },
+        null,
+        context.subscriptions
+      );
+
+      // 插件向 webview 推送消息
+      currentPanel.webview.postMessage({ command: "refactor" });
+      // 插件接收 webview 消息
+      currentPanel.webview.onDidReceiveMessage(
+        (message) => {
+          vscode.env.clipboard.writeText(imgUrl).then(() => {
+            vscode.window.showInformationMessage("OSS 链接已复制");
+          });
+        },
+        undefined,
+        context.subscriptions
+      );
+    }),
+
+    // 上传文件
+    vscode.commands.registerCommand("uploader.uploadFile", async () => {
+      uploadFileToOSS();
+    }),
+
+    // 更新OSS文件列表
+    vscode.commands.registerCommand("uploader.refreshOss", async () => {
+      vscode.window.showInformationMessage("资源已刷新");
+      treeList.refresh();
+    }),
+
+    // 配置 OSS
+    vscode.commands.registerCommand("uploader.configuration", async () => {
+      vscode.window.showInformationMessage(
+        "请导航至 Settings 配置界面，搜索 ali-oss-management 进行配置"
+      );
+      vscode.commands.executeCommand("workbench.action.openSettings");
+    })
+  );
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

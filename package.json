@@ -3,6 +3,12 @@
   "displayName": "ali-oss-management",
   "description": "ali oss management plugin for vscode",
   "version": "0.0.1",
+  "publisher": "xiazhaohui",
+  "icon": "src/images/upload-icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiazhaohui/ali-oss-management.git"
+  },
   "engines": {
     "vscode": "^1.92.0"
   },
@@ -149,6 +155,7 @@
   },
   "dependencies": {
     "@types/ali-oss": "^6.16.11",
+    "@vscode/vsce": "^3.0.0",
     "ali-oss": "^6.21.0"
   }
 }

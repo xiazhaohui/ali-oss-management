@@ -1,71 +1,29 @@
 # ali-oss-management README
 
-This is the README for your extension "ali-oss-management". After writing up a brief description, we recommend including the following sections.
+一款运行在 VS Code 的 OSS 资源管理插件，可以方便快捷的自定义 OSS 配置，进行上传图片、视频等静态资源，并支持预览。
 
-## Features
+## 运行
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+fn + F5 或者 点击“运行和调试”活动栏的 Run Extension，即可成功运行一个vscode
 
-For example if there is an image subfolder under your extension project workspace:
+## 调试
 
-\!\[feature X\]\(images/feature-x.png\)
+option + command + i 打开 vscode 的控制器
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## 打包
 
-## Requirements
+```bash
+# vsce 是一个用于将插件发布到市场上的命令行工具
+npm install -g @vacode/vecs
+```
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```bash
+# 这个命令会在当前目录生成一个.vsix文件，将这个文件直接拖到 VS Code Extension就可以直接安装使用
+vsce package
+```
 
-## Extension Settings
+## 发布
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+打开网站 [Extensions for Visual Studio Code](https://marketplace.visualstudio.com/)，选择 `publish extensions`，依次配置 Name、ID 等信息。
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+在[管理页面](https://marketplace.visualstudio.com/manage/publishers)手动发布，将.vsix文件拖拽上传，等待几分钟即可验证。

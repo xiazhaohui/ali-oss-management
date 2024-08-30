@@ -1,7 +1,7 @@
 {
   "name": "ali-oss-management",
   "displayName": "ali-oss-management",
-  "description": "",
+  "description": "ali oss management plugin for vscode",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.92.0"

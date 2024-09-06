@@ -2,7 +2,7 @@
   "name": "ali-oss-management",
   "displayName": "ali-oss-management",
   "description": "ali oss management plugin for vscode",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "xiazhaohui",
   "icon": "src/images/upload-icon.png",
   "repository": {
@@ -72,6 +72,11 @@
         "icon": "$(search-refresh)"
       },
       {
+        "command": "uploader.updateFolder",
+        "title": "更新目录",
+        "icon": "$(search-refresh)"
+      },
+      {
         "command": "uploader.configuration",
         "title": "配置",
         "icon": "$(settings-view-bar-icon)"
@@ -80,6 +85,10 @@
         "command": "webviewPanel.showImage",
         "title": "预览图片",
         "category": "预览"
+      },
+      {
+        "command": "extension.setData",
+        "title": "设置变量"
       }
     ],
     "configuration": {
@@ -126,10 +135,6 @@
         "ali-oss-management.bucket": {
           "type": "string",
           "description": "Input the OSS bucket for your extension."
-        },
-        "ali-oss-management.folder": {
-          "type": "string",
-          "description": "Input the OSS folder for your extension. such as 'resource/' or 'resource/image/'"
         }
       }
     }

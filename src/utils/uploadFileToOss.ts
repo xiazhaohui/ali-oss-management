@@ -12,7 +12,7 @@ export type TAliOssConfig = {
   folder?: string;
 };
 
-export const uploadFileToOSS = async () => {
+export const uploadFileToOSS = async (state: any) => {
   const config = vscode.workspace.getConfiguration();
   const ossConfig = config.get("ali-oss-management") as TAliOssConfig;
   const { accessKeyId, accessKeySecret, endpoint, region, bucket, folder } =
@@ -27,7 +27,7 @@ export const uploadFileToOSS = async () => {
   const hasCompleteConfig = Object.values(newOssConfig as any).every(
     (item) => !!item
   );
-  console.log("OSS 配置", ossConfig);
+  console.log("OSS 配置", ossConfig, state);
 
   if (!hasCompleteConfig) {
     vscode.window.showErrorMessage(
@@ -41,7 +41,7 @@ export const uploadFileToOSS = async () => {
     canSelectFiles: true,
     canSelectFolders: false,
     canSelectMany: false,
-    openLabel: "Select a file",
+    openLabel: "选择文件",
     filters: {
       Images: ["jpg", "jpeg", "png", "gif"],
       Videos: ["mp4", "mov", "avi"],
@@ -54,7 +54,9 @@ export const uploadFileToOSS = async () => {
   const [selectedFile] = uri;
   const filePath = vscode.workspace.asRelativePath(selectedFile.fsPath);
   const name = path.basename(filePath);
-  const remotePath = `/${folder ? folder : ""}${new Date().getTime()}-${name}`;
+
+  // 上传到当前目录 获取目录变量
+  const remotePath = `/${state?.currentFolder || ""}${name}`;
   const fileStream = createReadStream(filePath);
   console.log("选择的文件流", remotePath, fileStream);
 

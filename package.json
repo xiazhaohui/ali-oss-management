@@ -2,7 +2,7 @@
   "name": "ali-oss-management",
   "displayName": "ali-oss-management",
   "description": "ali oss management plugin for vscode",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "xiazhaohui",
   "icon": "src/images/upload-icon.png",
   "repository": {
@@ -83,6 +83,11 @@
       },
       {
         "command": "webviewPanel.showImage",
+        "title": "预览图片",
+        "category": "预览"
+      },
+      {
+        "command": "webviewPanel.showVideo",
         "title": "预览图片",
         "category": "预览"
       },

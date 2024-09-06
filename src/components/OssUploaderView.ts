@@ -55,12 +55,21 @@ export class OssUploaderViewProvider
     // 文件
     if (element.type === "file") {
       // 图片
-      const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(
-        element.name.slice(element.name.lastIndexOf(".") + 1)?.toUpperCase()
-      );
+      const suffix = element.name
+        .slice(element.name.lastIndexOf(".") + 1)
+        ?.toUpperCase();
+      const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(suffix);
+      const isVideo = ["MP4", "MOV", "AVI"].includes(suffix);
       if (isImage) {
         treeItem.command = {
           command: "webviewPanel.showImage",
+          title: "预览",
+          arguments: [element.url],
+        };
+      }
+      if (isVideo) {
+        treeItem.command = {
+          command: "webviewPanel.showVideo",
           title: "预览",
           arguments: [element.url],
         };
@@ -119,7 +128,7 @@ export class OssUploaderViewProvider
                 type: "file",
                 isParent: false,
                 name: item.name,
-                url: item.url,
+                url: item.url.replaceAll("http://", "https://"),
               });
             });
             // @ts-ignore
@@ -180,7 +189,7 @@ export class OssUploaderViewProvider
                   type: "file",
                   isParent: false,
                   name: `${item.name.replace(prefixName as string, "")}`,
-                  url: item.url,
+                  url: item.url.replaceAll("http://", "https://"),
                 });
               });
             // @ts-ignore

@@ -1,4 +1,4 @@
-export const getWebviewContent = (url: string) => {
+export const getWebviewVideoContent = (url: string) => {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -7,27 +7,27 @@ export const getWebviewContent = (url: string) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cat Coding</title>
         <style>
+          .container {
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+          }
           .link {
-            margin-top: 10px;
+            margin: 10px 0;
           }
           #url-dom {
             word-break: break-all;
           }
-          .operation {
-            margin: 10px 0;
-          }
         </style>
       </head>
       <body>
-        <img src="${url}" />
-        <div>
+        <div class="container">
           <div class="link">
+            <button id="post-dom">复制</button>
             <span>OSS 链接：</span>
             <span id="url-dom">${url}</span>
           </div>
-          <div class="operation">
-            <button id="post-dom">复制</button>
-          </div>
+          <video controls src="${url}" />
         </div>
       </body>
 

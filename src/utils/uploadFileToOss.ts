@@ -55,6 +55,12 @@ export const uploadFileToOSS = async (state: any) => {
         "wav",
         "aac",
         "m4a",
+        "json",
+        "txt",
+        "xlsx",
+        "xls",
+        "zip",
+        "rar",
       ],
     },
   });

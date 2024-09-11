@@ -4,6 +4,8 @@ import { uploadFileToOSS } from "./utils/uploadFileToOss";
 import { getWebviewImageContent } from "./components/getWebviewImageContent";
 import { getWebviewVideoContent } from "./components/getWebviewVideoContent";
 import { getWebviewAudioContent } from "./components/getWebviewAudioContent";
+import { getWebviewJsonContent } from "./components/getWebviewJsonContent";
+import axios from "axios";
 
 export function activate(context: vscode.ExtensionContext) {
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -113,7 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
       );
     }),
 
-    // 预览视频
+    // 预览音频
     vscode.commands.registerCommand("webviewPanel.showAudio", (ossUrl) => {
       console.log("文件-音频预览", ossUrl);
       if (currentPanel) {
@@ -129,6 +131,48 @@ export function activate(context: vscode.ExtensionContext) {
         }
       );
       currentPanel.webview.html = getWebviewAudioContent(ossUrl);
+      currentPanel.onDidDispose(
+        () => {
+          currentPanel = undefined;
+        },
+        null,
+        context.subscriptions
+      );
+
+      // 插件向 webview 推送消息
+      currentPanel.webview.postMessage({ command: "refactor" });
+      // 插件接收 webview 消息
+      currentPanel.webview.onDidReceiveMessage(
+        (message) => {
+          vscode.env.clipboard.writeText(ossUrl).then(() => {
+            vscode.window.showInformationMessage("OSS 链接已复制");
+          });
+        },
+        undefined,
+        context.subscriptions
+      );
+    }),
+
+    // 预览JSON
+    vscode.commands.registerCommand("webviewPanel.showJson", async (ossUrl) => {
+      console.log("文件-JSON预览", ossUrl);
+      if (currentPanel) {
+        currentPanel.dispose();
+      }
+
+      currentPanel = vscode.window.createWebviewPanel(
+        "webviewId",
+        "webviewTitle-JSON预览",
+        vscode.ViewColumn.One,
+        {
+          enableScripts: true,
+        }
+      );
+      const jsonData = await axios.get(ossUrl);
+      const jsonContent = JSON.stringify(jsonData.data, null, 2);
+      console.log(" JSON内容", jsonData, jsonContent);
+
+      currentPanel.webview.html = getWebviewJsonContent(ossUrl, jsonContent);
       currentPanel.onDidDispose(
         () => {
           currentPanel = undefined;

@@ -97,6 +97,11 @@
         "category": "预览"
       },
       {
+        "command": "webviewPanel.showJson",
+        "title": "预览JSON",
+        "category": "预览"
+      },
+      {
         "command": "extension.setData",
         "title": "设置变量"
       }
@@ -171,6 +176,7 @@
   "dependencies": {
     "@types/ali-oss": "^6.16.11",
     "@vscode/vsce": "^3.0.0",
-    "ali-oss": "^6.21.0"
+    "ali-oss": "^6.21.0",
+    "axios": "^1.7.7"
   }
 }

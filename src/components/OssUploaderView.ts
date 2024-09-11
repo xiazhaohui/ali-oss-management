@@ -60,6 +60,7 @@ export class OssUploaderViewProvider
         ?.toUpperCase();
       const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(suffix);
       const isVideo = ["MP4", "MOV", "AVI"].includes(suffix);
+      const isAudio = ["MP3", "WAV", "AAC", "M4A"].includes(suffix);
       if (isImage) {
         treeItem.command = {
           command: "webviewPanel.showImage",
@@ -70,6 +71,13 @@ export class OssUploaderViewProvider
       if (isVideo) {
         treeItem.command = {
           command: "webviewPanel.showVideo",
+          title: "预览",
+          arguments: [element.url],
+        };
+      }
+      if (isAudio) {
+        treeItem.command = {
+          command: "webviewPanel.showAudio",
           title: "预览",
           arguments: [element.url],
         };

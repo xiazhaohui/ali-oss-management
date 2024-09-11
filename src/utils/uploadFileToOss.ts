@@ -43,7 +43,19 @@ export const uploadFileToOSS = async (state: any) => {
     canSelectMany: false,
     openLabel: "选择文件",
     filters: {
-      Images: ["jpg", "jpeg", "png", "gif", "mp4", "mov", "avi"],
+      Images: [
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "mp4",
+        "mov",
+        "avi",
+        "mp3",
+        "wav",
+        "aac",
+        "m4a",
+      ],
     },
   });
 

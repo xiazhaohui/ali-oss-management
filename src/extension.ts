@@ -28,7 +28,6 @@ export function activate(context: vscode.ExtensionContext) {
         const document = await vscode.workspace.openTextDocument(filePath);
         // 读取文件内容
         const fileContent = document.getText();
-        console.log("读文件", fileContent, JSON.parse(fileContent));
       } catch (error) {
         vscode.window.showErrorMessage(`Error reading file: ${error}`);
       }
@@ -41,14 +40,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 预览图片
     vscode.commands.registerCommand("webviewPanel.showImage", (imgUrl) => {
-      console.log("文件-图片预览", imgUrl);
       if (currentPanel) {
         currentPanel.dispose();
       }
 
       currentPanel = vscode.window.createWebviewPanel(
         "webviewId",
-        "webviewTitle-图片预览",
+        "图片预览",
         vscode.ViewColumn.One,
         {
           enableScripts: true,
@@ -79,14 +77,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 预览视频
     vscode.commands.registerCommand("webviewPanel.showVideo", (videoUrl) => {
-      console.log("文件-视频预览", videoUrl);
       if (currentPanel) {
         currentPanel.dispose();
       }
 
       currentPanel = vscode.window.createWebviewPanel(
         "webviewId",
-        "webviewTitle-视频预览",
+        "视频预览",
         vscode.ViewColumn.One,
         {
           enableScripts: true,
@@ -117,14 +114,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 预览音频
     vscode.commands.registerCommand("webviewPanel.showAudio", (ossUrl) => {
-      console.log("文件-音频预览", ossUrl);
       if (currentPanel) {
         currentPanel.dispose();
       }
 
       currentPanel = vscode.window.createWebviewPanel(
         "webviewId",
-        "webviewTitle-音频预览",
+        "音频预览",
         vscode.ViewColumn.One,
         {
           enableScripts: true,
@@ -155,14 +151,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 预览JSON
     vscode.commands.registerCommand("webviewPanel.showJson", async (ossUrl) => {
-      console.log("文件-JSON预览", ossUrl);
       if (currentPanel) {
         currentPanel.dispose();
       }
 
       currentPanel = vscode.window.createWebviewPanel(
         "webviewId",
-        "webviewTitle-JSON预览",
+        "JSON预览",
         vscode.ViewColumn.One,
         {
           enableScripts: true,
@@ -170,7 +165,6 @@ export function activate(context: vscode.ExtensionContext) {
       );
       const jsonData = await axios.get(ossUrl);
       const jsonContent = JSON.stringify(jsonData.data, null, 2);
-      console.log(" JSON内容", jsonData, jsonContent);
 
       currentPanel.webview.html = getWebviewJsonContent(ossUrl, jsonContent);
       currentPanel.onDidDispose(
@@ -198,7 +192,6 @@ export function activate(context: vscode.ExtensionContext) {
     // 上传文件
     vscode.commands.registerCommand("uploader.uploadFile", async () => {
       const data = await context.globalState.get("globalData");
-      console.log("获取变量", data);
       uploadFileToOSS(data);
     }),
 

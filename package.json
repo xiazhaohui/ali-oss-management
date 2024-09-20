@@ -58,6 +58,12 @@
           "group": "navigation@3",
           "when": "view === view-id"
         }
+      ],
+      "view/item/context": [
+        {
+          "command": "uploader.copyLink",
+          "when": "viewItem"
+        }
       ]
     },
     "commands": [
@@ -104,6 +110,10 @@
       {
         "command": "extension.setData",
         "title": "设置变量"
+      },
+      {
+        "command": "uploader.copyLink",
+        "title": "复制链接"
       }
     ],
     "configuration": {

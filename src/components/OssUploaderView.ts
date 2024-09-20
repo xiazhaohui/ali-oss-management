@@ -54,6 +54,7 @@ export class OssUploaderViewProvider
     }
     // 文件
     if (element.type === "file") {
+      treeItem.contextValue = element.url;
       // 图片
       const suffix = element.name
         .slice(element.name.lastIndexOf(".") + 1)

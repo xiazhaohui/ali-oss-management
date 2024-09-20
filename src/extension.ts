@@ -208,6 +208,13 @@ export function activate(context: vscode.ExtensionContext) {
       treeList.refresh();
     }),
 
+    // 复制链接
+    vscode.commands.registerCommand("uploader.copyLink", async (e) => {
+      vscode.env.clipboard.writeText(e.url).then(() => {
+        vscode.window.showInformationMessage("链接已复制");
+      });
+    }),
+
     // 配置 OSS
     vscode.commands.registerCommand("uploader.configuration", async () => {
       vscode.window.showInformationMessage(

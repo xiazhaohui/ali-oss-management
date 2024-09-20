@@ -62,7 +62,8 @@
       "view/item/context": [
         {
           "command": "uploader.copyLink",
-          "when": "viewItem"
+          "when": "viewItem",
+          "group": "inline"
         }
       ]
     },
@@ -113,7 +114,8 @@
       },
       {
         "command": "uploader.copyLink",
-        "title": "复制链接"
+        "title": "复制链接",
+        "icon": "$(files)"
       }
     ],
     "configuration": {

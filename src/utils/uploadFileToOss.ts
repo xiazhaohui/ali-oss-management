@@ -85,14 +85,12 @@ export const uploadFileToOSS = async (state: any) => {
       const isVideo = AVAILABLE_FILE_TYPE_VIDEO.includes(suffix);
       const isAudio = AVAILABLE_FILE_TYPE_AUDIO.includes(suffix);
 
-      if (isImage) {
-        vscode.commands.executeCommand("webviewPanel.showImage", ossUrl);
-      }
-      if (isVideo) {
-        vscode.commands.executeCommand("webviewPanel.showVideo", ossUrl);
-      }
-      if (isAudio) {
-        vscode.commands.executeCommand("webviewPanel.showAudio", ossUrl);
+      if (isImage || isVideo || isAudio) {
+        vscode.commands.executeCommand(
+          "webviewPanel.previewFile",
+          ossUrl,
+          isImage ? "IMAGE" : isVideo ? "VIDEO" : "AUDIO"
+        );
       }
 
       vscode.commands.executeCommand("uploader.refreshOss");

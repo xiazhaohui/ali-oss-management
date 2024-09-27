@@ -99,18 +99,8 @@
         "icon": "$(settings-view-bar-icon)"
       },
       {
-        "command": "webviewPanel.showImage",
-        "title": "预览图片",
-        "category": "预览"
-      },
-      {
-        "command": "webviewPanel.showVideo",
-        "title": "预览视频",
-        "category": "预览"
-      },
-      {
-        "command": "webviewPanel.showAudio",
-        "title": "预览音频",
+        "command": "webviewPanel.previewFile",
+        "title": "文件预览",
         "category": "预览"
       },
       {

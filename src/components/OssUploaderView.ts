@@ -68,25 +68,14 @@ export class OssUploaderViewProvider
       const isVideo = AVAILABLE_FILE_TYPE_VIDEO.includes(suffix);
       const isAudio = AVAILABLE_FILE_TYPE_AUDIO.includes(suffix);
       const isJSON = ["JSON"].includes(suffix);
-      if (isImage) {
+      if (isImage || isVideo || isAudio) {
         treeItem.command = {
-          command: "webviewPanel.showImage",
+          command: "webviewPanel.previewFile",
           title: "预览",
-          arguments: [element.url],
-        };
-      }
-      if (isVideo) {
-        treeItem.command = {
-          command: "webviewPanel.showVideo",
-          title: "预览",
-          arguments: [element.url],
-        };
-      }
-      if (isAudio) {
-        treeItem.command = {
-          command: "webviewPanel.showAudio",
-          title: "预览",
-          arguments: [element.url],
+          arguments: [
+            element.url,
+            isImage ? "IMAGE" : isVideo ? "VIDEO" : "AUDIO",
+          ],
         };
       }
       if (isJSON) {

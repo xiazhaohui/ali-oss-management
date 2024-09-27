@@ -40,115 +40,54 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // 预览图片
-    vscode.commands.registerCommand("webviewPanel.showImage", (imgUrl) => {
-      if (currentPanel) {
-        currentPanel.dispose();
-      }
-
-      currentPanel = vscode.window.createWebviewPanel(
-        "webviewId",
-        "图片预览",
-        vscode.ViewColumn.One,
-        {
-          enableScripts: true,
+    vscode.commands.registerCommand(
+      "webviewPanel.previewFile",
+      (ossUrl, fileType) => {
+        if (currentPanel) {
+          currentPanel.dispose();
         }
-      );
-      currentPanel.webview.html = getWebviewImageContent(imgUrl);
-      currentPanel.onDidDispose(
-        () => {
-          currentPanel = undefined;
-        },
-        null,
-        context.subscriptions
-      );
 
-      // 插件向 webview 推送消息
-      currentPanel.webview.postMessage({ command: "refactor" });
-      // 插件接收 webview 消息
-      currentPanel.webview.onDidReceiveMessage(
-        (message) => {
-          vscode.env.clipboard.writeText(imgUrl).then(() => {
-            vscode.window.showInformationMessage("OSS 链接已复制");
-          });
-        },
-        undefined,
-        context.subscriptions
-      );
-    }),
+        const previrwWebviewOptions = {
+          IMAGE: { title: "图片预览", webview: getWebviewImageContent },
+          VIDEO: { title: "视频预览", webview: getWebviewVideoContent },
+          AUDIO: { title: "音频预览", webview: getWebviewAudioContent },
+        };
+        // @ts-ignore
+        const previreTitle = previrwWebviewOptions[fileType].title;
+        // @ts-ignore
+        const previrwWebview = previrwWebviewOptions[fileType].webview;
 
-    // 预览视频
-    vscode.commands.registerCommand("webviewPanel.showVideo", (videoUrl) => {
-      if (currentPanel) {
-        currentPanel.dispose();
+        currentPanel = vscode.window.createWebviewPanel(
+          "webviewId",
+          previreTitle,
+          vscode.ViewColumn.One,
+          {
+            enableScripts: true,
+          }
+        );
+        currentPanel.webview.html = previrwWebview(ossUrl);
+        currentPanel.onDidDispose(
+          () => {
+            currentPanel = undefined;
+          },
+          null,
+          context.subscriptions
+        );
+
+        // 插件向 webview 推送消息
+        currentPanel.webview.postMessage({ command: "refactor" });
+        // 插件接收 webview 消息
+        currentPanel.webview.onDidReceiveMessage(
+          (message) => {
+            vscode.env.clipboard.writeText(ossUrl).then(() => {
+              vscode.window.showInformationMessage("OSS 链接已复制");
+            });
+          },
+          undefined,
+          context.subscriptions
+        );
       }
-
-      currentPanel = vscode.window.createWebviewPanel(
-        "webviewId",
-        "视频预览",
-        vscode.ViewColumn.One,
-        {
-          enableScripts: true,
-        }
-      );
-      currentPanel.webview.html = getWebviewVideoContent(videoUrl);
-      currentPanel.onDidDispose(
-        () => {
-          currentPanel = undefined;
-        },
-        null,
-        context.subscriptions
-      );
-
-      // 插件向 webview 推送消息
-      currentPanel.webview.postMessage({ command: "refactor" });
-      // 插件接收 webview 消息
-      currentPanel.webview.onDidReceiveMessage(
-        (message) => {
-          vscode.env.clipboard.writeText(videoUrl).then(() => {
-            vscode.window.showInformationMessage("OSS 链接已复制");
-          });
-        },
-        undefined,
-        context.subscriptions
-      );
-    }),
-
-    // 预览音频
-    vscode.commands.registerCommand("webviewPanel.showAudio", (ossUrl) => {
-      if (currentPanel) {
-        currentPanel.dispose();
-      }
-
-      currentPanel = vscode.window.createWebviewPanel(
-        "webviewId",
-        "音频预览",
-        vscode.ViewColumn.One,
-        {
-          enableScripts: true,
-        }
-      );
-      currentPanel.webview.html = getWebviewAudioContent(ossUrl);
-      currentPanel.onDidDispose(
-        () => {
-          currentPanel = undefined;
-        },
-        null,
-        context.subscriptions
-      );
-
-      // 插件向 webview 推送消息
-      currentPanel.webview.postMessage({ command: "refactor" });
-      // 插件接收 webview 消息
-      currentPanel.webview.onDidReceiveMessage(
-        (message) => {
-          vscode.env.clipboard.writeText(ossUrl).then(() => {
-            vscode.window.showInformationMessage("OSS 链接已复制");
-          });
-        },
-        undefined,
-        context.subscriptions
-      );
-    }),
+    ),
 
     // 预览JSON
     vscode.commands.registerCommand("webviewPanel.showJson", async (ossUrl) => {

@@ -16,7 +16,7 @@ export const createFolder = async (
   const hasCompleteConfig = Object.values(newOssConfig as any).every(
     (item) => !!item
   );
-  const remotePath = `/${currentFolder || ""}${folderName}`;
+  const remotePath = `/${currentFolder || ""}${folderName}/`;
   if (!hasCompleteConfig) {
     vscode.window.showErrorMessage(
       "OSS 配置信息不完整，请先填写正确的 accessKeyId、accessKeySecret、bucket、endpoint 等数据"
@@ -26,7 +26,7 @@ export const createFolder = async (
 
   const client = new OSS(newOssConfig);
   client
-    .put(`${remotePath}/`, Buffer.from(""), { timeout: 10 * 60 * 1000 })
+    .put(remotePath, Buffer.from(""), { timeout: 10 * 60 * 1000 })
     .then((res) => {
       vscode.commands.executeCommand("uploader.refreshOss");
     })

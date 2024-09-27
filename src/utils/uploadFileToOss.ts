@@ -3,6 +3,11 @@ import path from "path";
 import OSS from "ali-oss";
 import { createReadStream } from "fs";
 import { getOssConfig } from "./vscode";
+import {
+  AVAILABLE_FILE_TYLE_IMAGE,
+  AVAILABLE_FILE_TYPE_AUDIO,
+  AVAILABLE_FILE_TYPE_VIDEO,
+} from "./constants";
 
 export type TAliOssConfig = {
   accessKeyId: string;
@@ -76,9 +81,9 @@ export const uploadFileToOSS = async (state: any) => {
       // @ts-ignore
       const ossUrl = res?.url || "";
       const suffix = ossUrl.slice(ossUrl.lastIndexOf(".") + 1)?.toUpperCase();
-      const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(suffix);
-      const isVideo = ["MP4", "MOV", "AVI"].includes(suffix);
-      const isAudio = ["MP3", "WAV", "AAC", "M4A"].includes(suffix);
+      const isImage = AVAILABLE_FILE_TYLE_IMAGE.includes(suffix);
+      const isVideo = AVAILABLE_FILE_TYPE_VIDEO.includes(suffix);
+      const isAudio = AVAILABLE_FILE_TYPE_AUDIO.includes(suffix);
 
       if (isImage) {
         vscode.commands.executeCommand("webviewPanel.showImage", ossUrl);

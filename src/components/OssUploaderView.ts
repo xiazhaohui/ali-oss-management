@@ -7,6 +7,11 @@ import {
 } from "vscode";
 import OSS from "ali-oss";
 import { TAliOssConfig } from "../utils/uploadFileToOss";
+import {
+  AVAILABLE_FILE_TYLE_IMAGE,
+  AVAILABLE_FILE_TYPE_AUDIO,
+  AVAILABLE_FILE_TYPE_VIDEO,
+} from "../utils/constants";
 
 export class OssUploaderViewProvider
   implements vscode.TreeDataProvider<FileItem>
@@ -59,9 +64,9 @@ export class OssUploaderViewProvider
       const suffix = element.name
         .slice(element.name.lastIndexOf(".") + 1)
         ?.toUpperCase();
-      const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(suffix);
-      const isVideo = ["MP4", "MOV", "AVI"].includes(suffix);
-      const isAudio = ["MP3", "WAV", "AAC", "M4A"].includes(suffix);
+      const isImage = AVAILABLE_FILE_TYLE_IMAGE.includes(suffix);
+      const isVideo = AVAILABLE_FILE_TYPE_VIDEO.includes(suffix);
+      const isAudio = AVAILABLE_FILE_TYPE_AUDIO.includes(suffix);
       const isJSON = ["JSON"].includes(suffix);
       if (isImage) {
         treeItem.command = {

@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import path from "path";
 import OSS from "ali-oss";
 import { createReadStream } from "fs";
+import { getOssConfig } from "./vscode";
 
 export type TAliOssConfig = {
   accessKeyId: string;
@@ -13,21 +14,11 @@ export type TAliOssConfig = {
 };
 
 export const uploadFileToOSS = async (state: any) => {
-  const config = vscode.workspace.getConfiguration();
-  const ossConfig = config.get("ali-oss-management") as TAliOssConfig;
-  const { accessKeyId, accessKeySecret, endpoint, region, bucket, folder } =
-    ossConfig;
-  const newOssConfig = {
-    accessKeyId,
-    accessKeySecret,
-    endpoint,
-    region,
-    bucket,
-  };
+  const newOssConfig = getOssConfig();
   const hasCompleteConfig = Object.values(newOssConfig as any).every(
     (item) => !!item
   );
-  console.log("OSS 配置", ossConfig, state);
+  console.log("OSS 配置", state);
 
   if (!hasCompleteConfig) {
     vscode.window.showErrorMessage(
@@ -84,17 +75,22 @@ export const uploadFileToOSS = async (state: any) => {
     .then((res) => {
       // @ts-ignore
       const ossUrl = res?.url || "";
-      const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(
-        ossUrl.slice(ossUrl.lastIndexOf(".") + 1)?.toUpperCase()
-      );
+      const suffix = ossUrl.slice(ossUrl.lastIndexOf(".") + 1)?.toUpperCase();
+      const isImage = ["PNG", "JPG", "JPEG", "GIF"].includes(suffix);
+      const isVideo = ["MP4", "MOV", "AVI"].includes(suffix);
+      const isAudio = ["MP3", "WAV", "AAC", "M4A"].includes(suffix);
 
       if (isImage) {
         vscode.commands.executeCommand("webviewPanel.showImage", ossUrl);
       }
+      if (isVideo) {
+        vscode.commands.executeCommand("webviewPanel.showVideo", ossUrl);
+      }
+      if (isAudio) {
+        vscode.commands.executeCommand("webviewPanel.showAudio", ossUrl);
+      }
+
       vscode.commands.executeCommand("uploader.refreshOss");
-      vscode.env.clipboard.writeText(ossUrl).then(() => {
-        vscode.window.showInformationMessage("OSS 链接已复制");
-      });
     })
     .catch(() => {
       vscode.window.showErrorMessage(

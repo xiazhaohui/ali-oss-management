@@ -6,6 +6,7 @@ import { getWebviewVideoContent } from "./components/getWebviewVideoContent";
 import { getWebviewAudioContent } from "./components/getWebviewAudioContent";
 import { getWebviewJsonContent } from "./components/getWebviewJsonContent";
 import axios from "axios";
+import { createFolder } from "./utils/createFolder";
 
 export function activate(context: vscode.ExtensionContext) {
   let currentPanel: vscode.WebviewPanel | undefined = undefined;
@@ -193,6 +194,24 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("uploader.uploadFile", async () => {
       const data = await context.globalState.get("globalData");
       uploadFileToOSS(data);
+    }),
+
+    // 创建文件夹
+    vscode.commands.registerCommand("uploader.createFolder", async () => {
+      const data = (await context.globalState.get("globalData")) as {
+        currentFolder: string;
+      };
+      const inputValue = await vscode.window.showInputBox({
+        placeHolder: "请输入文件夹名称",
+      });
+      const folderName = String(inputValue?.trim().replaceAll(" ", ""));
+      if (!folderName || folderName.includes("/")) {
+        vscode.window.showErrorMessage(
+          "请填写有效的文件夹名称，名称中不能包含斜杠 '/'"
+        );
+        return;
+      }
+      createFolder(folderName, data?.currentFolder);
     }),
 
     // 更新 OSS 文件列表

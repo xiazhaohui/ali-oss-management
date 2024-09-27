@@ -49,13 +49,18 @@
           "when": "view === view-id"
         },
         {
-          "command": "uploader.refreshOss",
+          "command": "uploader.createFolder",
           "group": "navigation@2",
           "when": "view === view-id"
         },
         {
-          "command": "uploader.configuration",
+          "command": "uploader.refreshOss",
           "group": "navigation@3",
+          "when": "view === view-id"
+        },
+        {
+          "command": "uploader.configuration",
+          "group": "navigation@4",
           "when": "view === view-id"
         }
       ],
@@ -71,7 +76,12 @@
       {
         "command": "uploader.uploadFile",
         "title": "上传文件",
-        "icon": "$(plus)"
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "uploader.createFolder",
+        "title": "创建文件夹",
+        "icon": "$(file-directory-create)"
       },
       {
         "command": "uploader.refreshOss",

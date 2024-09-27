@@ -20,20 +20,14 @@
 }
 ```
 
-3. 查看文件列表
+### 功能概览
 
-在编辑器左侧活动栏中，选择 `Ali OSS Management` 视图，即可看到 OSS 文件列表。
-![示例图](./src/images/image-list.png)
+- 支持切换文件夹，查看该文件夹内的文件；
+- 支持复制文件 OSS 链接；
+- 支持预览图片、视频、音频等类型的文件；
+- 支持上传图片、视频、音频等类型的文件；
+- 支持创建文件夹；
 
-支持选择某文件夹，查看该文件夹内的文件
-![示例图](./src/images/image-folder.png)
+### 操作示例
 
-4. 上传文件
-
-点击视图顶部的添加按钮，选择要上传的文件，即可上传到 OSS 当前目录中。
-
-![示例图](./src/images/image-upload.png)
-
-5. 预览文件
-支持预览图片类型的文件，点击图片文件即可在视图中预览。
-![alt text](./src/images/image-preview.png)
+![示例图](./src/images/upload-file-and-create-folder.gif)

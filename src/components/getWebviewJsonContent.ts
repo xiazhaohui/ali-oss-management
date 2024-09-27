@@ -12,12 +12,6 @@ export const getWebviewJsonContent = (url: string, jsonContent: string) => {
             flex-direction: column;
             overflow: auto;
           }
-          .link {
-            margin: 10px 0;
-          }
-          #url-dom {
-            word-break: break-all;
-          }
           pre {
             background-color: #f0f0f0;
             color: #333;
@@ -30,11 +24,6 @@ export const getWebviewJsonContent = (url: string, jsonContent: string) => {
       </head>
       <body>
         <div class="container">
-          <div class="link">
-            <button id="post-dom">复制</button>
-            <span>OSS 链接：</span>
-            <span id="url-dom">${url}</span>
-          </div>
           <pre>${jsonContent}</pre>
         </div>
       </body>

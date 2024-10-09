@@ -15,31 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerTreeDataProvider("view-id", treeList),
 
-    vscode.commands.registerCommand("uploader.readFile", async () => {
-      try {
-        // 指定要读取的文件路径
-        const filePath = vscode.Uri.file(
-          `${
-            vscode.workspace.rootPath ||
-            // @ts-ignore
-            vscode.workspace.workspaceFolders[0].uri.path
-          }/.vscode/settings.json`
-        );
-        // 打开文件
-        const document = await vscode.workspace.openTextDocument(filePath);
-        // 读取文件内容
-        const fileContent = document.getText();
-      } catch (error) {
-        vscode.window.showErrorMessage(`Error reading file: ${error}`);
-      }
-    }),
-
-    // 展开目录
-    vscode.commands.registerCommand("uploader.updateFolder", async (v) => {
-      treeList.updateFolder(v);
-    }),
-
-    // 预览图片
+    // 预览图片/视频/音频
     vscode.commands.registerCommand(
       "webviewPanel.previewFile",
       (ossUrl, fileType) => {
@@ -47,43 +23,30 @@ export function activate(context: vscode.ExtensionContext) {
           currentPanel.dispose();
         }
 
-        const previrwWebviewOptions = {
+        const previewWebviewOptions = {
           IMAGE: { title: "图片预览", webview: getWebviewImageContent },
           VIDEO: { title: "视频预览", webview: getWebviewVideoContent },
           AUDIO: { title: "音频预览", webview: getWebviewAudioContent },
         };
         // @ts-ignore
-        const previreTitle = previrwWebviewOptions[fileType].title;
+        const previewTitle = previewWebviewOptions[fileType].title;
         // @ts-ignore
-        const previrwWebview = previrwWebviewOptions[fileType].webview;
+        const previewWebview = previewWebviewOptions[fileType].webview;
 
         currentPanel = vscode.window.createWebviewPanel(
           "webviewId",
-          previreTitle,
+          previewTitle,
           vscode.ViewColumn.One,
           {
             enableScripts: true,
           }
         );
-        currentPanel.webview.html = previrwWebview(ossUrl);
+        currentPanel.webview.html = previewWebview(ossUrl);
         currentPanel.onDidDispose(
           () => {
             currentPanel = undefined;
           },
           null,
-          context.subscriptions
-        );
-
-        // 插件向 webview 推送消息
-        currentPanel.webview.postMessage({ command: "refactor" });
-        // 插件接收 webview 消息
-        currentPanel.webview.onDidReceiveMessage(
-          (message) => {
-            vscode.env.clipboard.writeText(ossUrl).then(() => {
-              vscode.window.showInformationMessage("OSS 链接已复制");
-            });
-          },
-          undefined,
           context.subscriptions
         );
       }
@@ -114,19 +77,6 @@ export function activate(context: vscode.ExtensionContext) {
         null,
         context.subscriptions
       );
-
-      // 插件向 webview 推送消息
-      currentPanel.webview.postMessage({ command: "refactor" });
-      // 插件接收 webview 消息
-      currentPanel.webview.onDidReceiveMessage(
-        (message) => {
-          vscode.env.clipboard.writeText(ossUrl).then(() => {
-            vscode.window.showInformationMessage("OSS 链接已复制");
-          });
-        },
-        undefined,
-        context.subscriptions
-      );
     }),
 
     // 上传文件
@@ -153,6 +103,11 @@ export function activate(context: vscode.ExtensionContext) {
       createFolder(folderName, data?.currentFolder);
     }),
 
+    // 展开文件夹
+    vscode.commands.registerCommand("uploader.updateFolder", async (v) => {
+      treeList.updateFolder(v);
+    }),
+
     // 更新 OSS 文件列表
     vscode.commands.registerCommand("uploader.refreshOss", async () => {
       vscode.window.showInformationMessage("资源已刷新");
@@ -174,6 +129,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.commands.executeCommand("workbench.action.openSettings");
     }),
 
+    // 状态管理
     vscode.commands.registerCommand("extension.setData", (v) => {
       context.globalState.update("globalData", v);
     })
